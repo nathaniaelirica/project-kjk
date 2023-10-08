@@ -5,6 +5,12 @@
       <li v-for="(network, index) in wifiNetworks" :key="index">
         <h2>Nama Jaringan: {{ network.ssid }}</h2>
         <p>Jenis Keamanan: {{ network.security }}</p>
+        <p v-if="network.isOpen">Status: Terbuka (Tidak Aman)</p>
+        <p v-else>
+          Status: Private (Aman)
+          <p v-if="network.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+          <p v-else-if="network.security === 'Open'">Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+        </p>
       </li>
     </ul>
   </div>
@@ -27,7 +33,13 @@ export default {
         const response = await fetch('http://localhost:3000/api/wifi/networks');
         if (response.ok) {
           const data = await response.json();
-          this.wifiNetworks = data.networks;
+          this.wifiNetworks = data.networks.map(network => {
+            return {
+              ssid: network.ssid,
+              security: network.security,
+              isOpen: network.security === 'Open' // Tambah properti isOpen
+            };
+          });
         } else {
           console.error('Response not OK:', response.status, response.statusText);
         }
@@ -38,6 +50,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 header {

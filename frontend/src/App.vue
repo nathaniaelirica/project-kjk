@@ -18,65 +18,97 @@
 
 <template>
   <div id="app">
-    <h1>Info WiFi</h1>
+    <h1 style="color: whitesmoke; font-family:system-ui; font-weight: bolder">
+      WiFi Security Checker
+    </h1>
     <!-- <button @click="checkWifi">Check WiFi</button> -->
-    <div class="card">
-      <div class="row">
-        <div class="col-md-3 mb-3" v-for="(network, index) in wifiNetworks" :key="index">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item border">
-              <div class="network-info">
+    <!-- <div class="card" style="border: none; background-color:  #8f7f62;"> -->
+      <div class="row" style="background-color #8b754a; border: none;">
+        <div
+          class="col-md-4"
+          v-for="(network, index) in wifiNetworks"
+          :key="index"
+        >
+          <ul class="list-group list-group-flush" style="justify-content: center;" >
+            <li class="list-group-item border rounded" style="background: rgba(255, 255, 255, 0.50);">
+              <div class="network-info" style="font-family: monospace;">
                 <div class="ssid">SSID: {{ network.ssid }}</div>
                 <div class="security">Security: {{ network.security }}</div>
-                <div class="status" :style="{ backgroundColor: network.isOpen ? 'red' : 'green', color: 'white' }">
-                  Status: {{ network.isOpen ? 'Terbuka (Tidak Aman)' : 'Private (Aman)' }}
+                <div
+                  class="status rounded"
+                  :style="{
+                    backgroundColor: network.isOpen ? 'red' : 'green',
+                    color: 'white',
+                  }"
+                >
+                  Status:
+                  {{
+                    network.isOpen ? "Terbuka (Tidak Aman)" : "Private (Aman)"
+                  }}
                 </div>
-                <br>
-                <button @click="showDetail(network)">Detail</button> <!-- Tambahkan tombol Detail -->
+                <br />
+                <button @click="showDetail(network)">Detail</button>
+                <!-- Tambahkan tombol Detail -->
               </div>
             </li>
           </ul>
         </div>
       </div>
-    </div>
-    
+    <!-- </div> -->
+
     <!-- Komponen AlertDefaultVue yang Anda buat -->
     <AlertDefaultVue :visible="showModal" variant="primary">
-    <div>
-      <div class="modal-body">
-        <div class="ssid">SSID: {{ selectedNetwork.ssid }}</div>
-        <div class="security">Security: {{ selectedNetwork.security }}</div>
-        <div class="status">
-          <p>Status: {{ selectedNetwork.isOpen ? 'Terbuka (Tidak Aman)' : 'Private (Aman)' }}</p>
-          <!-- <p v-if="selectedNetwork.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+      <div>
+        <div class="modal-body">
+          <div class="ssid">SSID: {{ selectedNetwork.ssid }}</div>
+          <div class="security">Security: {{ selectedNetwork.security }}</div>
+          <div class="status">
+            <p>
+              Status:
+              {{
+                selectedNetwork.isOpen
+                  ? "Terbuka (Tidak Aman)"
+                  : "Private (Aman)"
+              }}
+            </p>
+            <!-- <p v-if="selectedNetwork.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
           <p v-else-if="selectedNetwork.security === 'Open'">Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p> -->
-          <p v-if="selectedNetwork.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
-          <p v-else-if="selectedNetwork.security === 'Open'">Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+            <p v-if="selectedNetwork.security === 'WEP'">
+              Penjelasan: Jaringan WEP adalah jaringan yang tidak aman.
+              Disarankan untuk menggunakan jaringan yang lebih aman.
+            </p>
+            <p v-else-if="selectedNetwork.security === 'Open'">
+              Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan
+              tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" @click="closeModal" class="btn btn-secondary" style="font-family:monospace;">
+            Tutup
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" @click="closeModal" class="btn btn-secondary">Tutup</button>
-      </div>
-    </div>
-  </AlertDefaultVue>
-
+    </AlertDefaultVue>
   </div>
 </template>
 
 <script>
-import AlertDefaultVue from './components/AlertDefault.vue';
+import AlertDefaultVue from "./components/AlertDefault.vue";
+import image from '@/assets/image.png';
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    AlertDefaultVue
+    AlertDefaultVue,
   },
   data() {
     return {
       wifiNetworks: [], // Menyimpan daftar jaringan Wi-Fi dari server
       showModal: false,
       selectedNetwork: null,
-      OpenClose: this.visible
+      OpenClose: this.visible,
+      image: image
     };
   },
   created() {
@@ -86,21 +118,25 @@ export default {
   methods: {
     async fetchWifiNetworks() {
       try {
-        const response = await fetch('http://localhost:3000/api/wifi/networks');
+        const response = await fetch("http://localhost:3000/api/wifi/networks");
         if (response.ok) {
           const data = await response.json();
-          this.wifiNetworks = data.networks.map(network => {
+          this.wifiNetworks = data.networks.map((network) => {
             return {
               ssid: network.ssid,
               security: network.security,
-              isOpen: network.security === 'Open' // Tambah properti isOpen
+              isOpen: network.security === "Open", // Tambah properti isOpen
             };
           });
         } else {
-          console.error('Response not OK:', response.status, response.statusText);
+          console.error(
+            "Response not OK:",
+            response.status,
+            response.statusText
+          );
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     },
     showDetail(network) {
@@ -109,14 +145,15 @@ export default {
       this.showModal = true;
       console.log("detail");
     },
-    closeModal(){
+    closeModal() {
       this.showModal = false;
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
+
 .green-bg {
   background-color: green;
   color: white;
@@ -131,30 +168,45 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background: linear-gradient(to bottom, #5395b8, #5664e4);
+  min-height: 100vh;
+  margin: 0;
+  padding: 50px;
+  background-size: cover;
+  backdrop-filter: blur(10px);
+}
+
+h1 {
+  font-size: 3em;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.list-group-item {
+  box-shadow: 1px 2px 6px white;
 }
 
 button {
   font-size: 1em;
-  padding: 10px 20px;
-  background-color: #4c60af;
+  padding: 8px 25px;
+  background-color: #304fcc;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 button:hover {
-  background-color: #4c60af;
+  background-color: #152881;
 }
 
 ul {
   list-style-type: none;
-  padding: 0;
+  padding: 10px;
 }
 
-.ssid, .security, .wps {
+.ssid,
+.security,
+.wps {
   margin: 5px 0;
 }
 

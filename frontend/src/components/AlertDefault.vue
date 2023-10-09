@@ -13,14 +13,11 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal Title</h5>
+              <h5 class="modal-title" style="font-family:system-ui;">Deskripsi</h5>
               <!-- <button type="button" @click="OpenCloseFun()" class="btn-close"></button> -->
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="font-family:monospace">
               <slot></slot>
-            </div>
-            <div class="modal-footer">
-              <!-- <button type="button" @click="OpenCloseFun()" :class="'btn btn-' + variant"></button> -->
             </div>
           </div>
         </div>
@@ -55,3 +52,22 @@
   };
   </script>
   
+<style scoped>
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: zoomIn 0.1s ease forwards; /* Menggunakan animasi "zoomIn" */
+}
+
+/* Animasi "zoomIn" */
+@keyframes zoomIn {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+</style>

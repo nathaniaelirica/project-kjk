@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h1>Hasil Pemindaian Jaringan Wi-Fi</h1>
     <ul>
@@ -14,13 +14,69 @@
       </li>
     </ul>
   </div>
+</template> -->
+
+<template>
+  <div id="app">
+    <h1>Info WiFi</h1>
+    <!-- <button @click="checkWifi">Check WiFi</button> -->
+    <div class="card">
+      <div class="row">
+        <div class="col-md-3 mb-3" v-for="(network, index) in wifiNetworks" :key="index">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item border">
+              <div class="network-info">
+                <div class="ssid">SSID: {{ network.ssid }}</div>
+                <div class="security">Security: {{ network.security }}</div>
+                <div class="status" :style="{ backgroundColor: network.isOpen ? 'red' : 'green', color: 'white' }">
+                  Status: {{ network.isOpen ? 'Terbuka (Tidak Aman)' : 'Private (Aman)' }}
+                </div>
+                <br>
+                <button @click="showDetail(network)">Detail</button> <!-- Tambahkan tombol Detail -->
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Komponen AlertDefaultVue yang Anda buat -->
+    <AlertDefaultVue :visible="showModal" variant="primary">
+    <div>
+      <div class="modal-body">
+        <div class="ssid">SSID: {{ selectedNetwork.ssid }}</div>
+        <div class="security">Security: {{ selectedNetwork.security }}</div>
+        <div class="status">
+          <p>Status: {{ selectedNetwork.isOpen ? 'Terbuka (Tidak Aman)' : 'Private (Aman)' }}</p>
+          <!-- <p v-if="selectedNetwork.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+          <p v-else-if="selectedNetwork.security === 'Open'">Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p> -->
+          <p v-if="selectedNetwork.security === 'WEP'">Penjelasan: Jaringan WEP adalah jaringan yang tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+          <p v-else-if="selectedNetwork.security === 'Open'">Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" @click="closeModal" class="btn btn-secondary">Tutup</button>
+      </div>
+    </div>
+  </AlertDefaultVue>
+
+  </div>
 </template>
 
 <script>
+import AlertDefaultVue from './components/AlertDefault.vue';
+
 export default {
+  name: 'App',
+  components: {
+    AlertDefaultVue
+  },
   data() {
     return {
       wifiNetworks: [], // Menyimpan daftar jaringan Wi-Fi dari server
+      showModal: false,
+      selectedNetwork: null,
+      OpenClose: this.visible
     };
   },
   created() {
@@ -47,70 +103,65 @@ export default {
         console.error('Error:', error);
       }
     },
+    showDetail(network) {
+      // Menampilkan modal ketika tombol "Detail" ditekan
+      this.selectedNetwork = network;
+      this.showModal = true;
+      console.log("detail");
+    },
+    closeModal(){
+      this.showModal = false;
+    }
   },
 };
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.green-bg {
+  background-color: green;
+  color: white;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.red-bg {
+  background-color: red;
+  color: white;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
-  margin-top: 2rem;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+button {
+  font-size: 1em;
+  padding: 10px 20px;
+  background-color: #4c60af;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+button:hover {
+  background-color: #4c60af;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-nav a:first-of-type {
-  border: 0;
+.ssid, .security, .wps {
+  margin: 5px 0;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.no-wifi {
+  color: #514c4b;
+  font-weight: bold;
+  margin-top: 20px;
 }
+
 </style>

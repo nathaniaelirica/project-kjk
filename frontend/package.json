@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "all": "\"npm run dev\" \"nodemon ../backend/app.js\"",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

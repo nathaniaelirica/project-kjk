@@ -21,6 +21,7 @@
     <h1 style="color: whitesmoke; font-family:system-ui; font-weight: bolder">
       WiFi Security Checker
     </h1>
+    <br/>
     <!-- <button @click="checkWifi">Check WiFi</button> -->
     <!-- <div class="card" style="border: none; background-color:  #8f7f62;"> -->
       <div class="row" style="background-color #8b754a; border: none;">
@@ -80,6 +81,13 @@
             <p v-else-if="selectedNetwork.security === 'Open'">
               Penjelasan: Jaringan terbuka adalah jaringan tanpa enkripsi dan
               tidak aman. Disarankan untuk menggunakan jaringan yang lebih aman.
+            </p>
+            <p v-else-if="selectedNetwork.security === 'WPA2-Personal'">
+              Penjelasan: WPA2 (Wi-Fi Protected Access 2) adalah protokol keamanan Wi-Fi yang kuat untuk melindungi data yang dikirimkan melalui jaringan Wi-Fi sehingga 
+              WPA2 adalah standar keamanan yang <b>sangat dianjurkan</b> untuk digunakan dalam jaringan Wi-Fi Anda.
+            </p>
+            <p v-else-if="selectedNetwork.security === 'WPA3-Personal'">
+              Penjelasan: WPA3 adalah protokol keamanan Wi-Fi terbaru yang lebih kuat daripada WPA2 sehingga <b>tingkat keamanannya lebih tinggi lagi.</b>
             </p>
           </div>
         </div>

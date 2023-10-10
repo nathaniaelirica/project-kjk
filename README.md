@@ -15,5 +15,9 @@
 * Nathania (5027211057): Backend
 * Adiba (5027211060): Frontend
 
+### Dokumentasi Penilaian 1 
+<a href="https://ibb.co/p0hCQKD"><img src="https://i.ibb.co/r7dn3pP/Whats-App-Image-2023-10-10-at-04-54-41.jpg" alt="Whats-App-Image-2023-10-10-at-04-54-41" border="0"></a>
+<a href="https://ibb.co/y0N8BBH"><img src="https://i.ibb.co/31T0YYg/Whats-App-Image-2023-10-10-at-09-50-09.jpg" alt="Whats-App-Image-2023-10-10-at-09-50-09" border="0"></a>
+
 ### Rencana Penilaian 2
 Membuat paper berdasarkan aplikasi web yang telah dibuat.
